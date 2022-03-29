@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>ESP32 WebRadio</title>
+        <meta charset="UTF-8">
+        <meta name="color-scheme" content="dark light">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
+        <link rel="stylesheet" href="style.css">
+        <script src="script.js"></script>
+    </head>
+    <body>
+        <header class="row">
+            <h1 class="flex">ESP32 WebRadio</h1>
+        </header>
+        <div class="content">
+            <div class="card">
+                <form id="settings-form" class="column" onsubmit="return false;">
+                    <h2>Radio Settings</h2>
+                    <hr>
+                    <label for="channel">Radio Channel:</label>
+                    <select name="channel" onchange="changeChannel(this, 'radio-url');">
+                        <option value="swr1">SWR1</option>
+                        <option value="swr3" selected>SWR3</option>
+                        <option value="swr4">SWR4</option>
+                        <option value="antenne 1">Antenne 1</option>
+                        <option value="antenne bayern">Antenne Bayern</option>
+                        <option value="bigfm">BigFM</option>
+                        <option value="energy">Energy</option>
+                        <option value="107.7">107.7</option>
+                        <option value="custom">Custom</option>
+                    </select>
+                    <div class="column hidden" id="radio-url">
+                        <label for="url">Streaming URL:</label>
+                        <input type="text" name="url" placeholder="Custom URL" onchange="runCommand('POST', '/channel', {url: this.value});">
+                    </div>
+                    <br>
+                    <div class="column">
+                        <label for="volume">Volume:</label>
+                        <input type="range" name="volume" min="0" step="1" max="100" value="80" onchange="runCommand('POST', '/volume', {volume: parseInt(this.value)});">
+                    </div>
+                    <br>
+                    <hr>
+                    <div class="row">
+                        <button onclick="runCommand('POST', '/stop');">Stop</button>
+                        <div class="separator"></div>
+                        <button onclick="runCommand('POST', '/play');">Play</button>
+                    </div>
+                </form>
+            </div>
+            <div class="card">
+                <form id="alarm-form" class="column" onsubmit="return false">
+                    <h2>Alarm Clock</h2>
+                    <hr>
+                    <label for="channel">Radio Channel:</label>
+                    <select name="channel">
+                        <option value="swr1">SWR1</option>
+                        <option value="swr3" selected>SWR3</option>
+                        <option value="swr4">SWR4</option>
+                        <option value="antenne 1">Antenne 1</option>
+                        <option value="antenne bayern">Antenne Bayern</option>
+                        <option value="bigfm">BigFM</option>
+                        <option value="energy">Energy</option>
+                        <option value="107.7">107.7</option>
+                    </select>
+                    <br>
+                    <div class="column">
+                        <label for="time">Alarm Time:</label>
+                        <input type="datetime-local" name="time" placeholder="Alarm">
+                    </div>
+                    <div class="column">
+                        <label for="snooze">Snooze Time:</label>
+                        <input type="number" name="snooze" min="0" step="1" max="20" value="10" placeholder="Minutes">
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <button name="stop" onclick="stopAlarm(this);">Stop</button>
+                        <div class="separator"></div>
+                        <button name="start" onclick="startAlarm(this);">Start</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </body>
+</html>
