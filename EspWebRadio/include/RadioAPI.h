@@ -10,14 +10,13 @@
 class RadioAPI
 {
 public:
-  RadioAPI(WebServer *webserver, Radio *radio, RadioChannel *channelList, uint8_t listLength, RadioAlarm *alarm);
+  RadioAPI(WebServer *webserver, Radio *radio, RadioAlarm *alarm);
 
 private:
   static WebServer *webserver;
   static Radio *radio;
-  static RadioChannel *channelList;
-  static uint8_t listLength;
   static RadioChannel currentChannel;
+  static RadioChannel currentAlarmChannel;
   static RadioAlarm *alarm;
 
   static void onRoot();

@@ -15,7 +15,7 @@ function changeChannel(element, fieldName) {
     }
     else {
         urlField.style.display = 'none';
-        runCommand('POST', '/channel', {channel: element.value});
+        runCommand('POST', '/channel', {url: element.value});
     }
 }
 
@@ -24,7 +24,7 @@ function startAlarm(button) {
 
     if(button.innerHTML == 'Start') {
         var data = {
-            channel: form['channel'].value,
+            url: form['channel'].value,
             time: form['time'].value + 'Z',
             snooze: parseInt(form['snooze'].value)
         };
@@ -328,14 +328,18 @@ select {
                     <hr>
                     <label for="channel">Radio Channel:</label>
                     <select name="channel" onchange="changeChannel(this, 'radio-url');">
-                        <option value="swr1">SWR1</option>
-                        <option value="swr3" selected>SWR3</option>
-                        <option value="swr4">SWR4</option>
-                        <option value="antenne 1">Antenne 1</option>
-                        <option value="antenne bayern">Antenne Bayern</option>
-                        <option value="bigfm">BigFM</option>
-                        <option value="energy">Energy</option>
-                        <option value="107.7">107.7</option>
+                        <option value="http://liveradio.swr.de/sw282p3/swr1bw">SWR1</option>
+                        <option value="http://liveradio.swr.de/sw282p3/swr3" selected>SWR3</option>
+                        <option value="http://liveradio.swr.de/sw282p3/swr4bw">SWR4</option>
+                        <option value="http://stream.antenne1.de/a1stg/livestream2.mp3">Antenne 1</option>
+                        <option value="http://stream.antenne.de/antenne/stream/mp3">Antenne Bayern</option>
+                        <option value="http://streams.bigfm.de/bigfm-deutschland-128-mp3">BigFM</option>
+                        <option value="https://liveradio.swr.de/d9zadj3/dasding/">Dasding</option>
+                        <option value="https://streams.br.de/bayern3_2.m3u">Bayern 3</option>
+                        <option value="https://stream.srg-ssr.ch/rsp/mp3_128.m3u">Swiss Pop</option>
+                        <option value="https://streams.80s80s.de/web/mp3-128/streams.80s80s.de/">80s 80s</option>
+                        <option value="http://nrj.de/stuttgart">Energy Stuttgart</option>
+                        <option value="http://addrad.io/4454xb3">107.7</option>
                         <option value="custom">Custom</option>
                     </select>
                     <div class="column hidden" id="radio-url">
@@ -362,14 +366,18 @@ select {
                     <hr>
                     <label for="channel">Radio Channel:</label>
                     <select name="channel">
-                        <option value="swr1">SWR1</option>
-                        <option value="swr3" selected>SWR3</option>
-                        <option value="swr4">SWR4</option>
-                        <option value="antenne 1">Antenne 1</option>
-                        <option value="antenne bayern">Antenne Bayern</option>
-                        <option value="bigfm">BigFM</option>
-                        <option value="energy">Energy</option>
-                        <option value="107.7">107.7</option>
+                        <option value="http://liveradio.swr.de/sw282p3/swr1bw">SWR1</option>
+                        <option value="http://liveradio.swr.de/sw282p3/swr3" selected>SWR3</option>
+                        <option value="http://liveradio.swr.de/sw282p3/swr4bw">SWR4</option>
+                        <option value="http://stream.antenne1.de/a1stg/livestream2.mp3">Antenne 1</option>
+                        <option value="http://stream.antenne.de/antenne/stream/mp3">Antenne Bayern</option>
+                        <option value="http://streams.bigfm.de/bigfm-deutschland-128-mp3">BigFM</option>
+                        <option value="https://liveradio.swr.de/d9zadj3/dasding/">Dasding</option>
+                        <option value="https://streams.br.de/bayern3_2.m3u">Bayern 3</option>
+                        <option value="https://stream.srg-ssr.ch/rsp/mp3_128.m3u">Swiss Pop</option>
+                        <option value="https://streams.80s80s.de/web/mp3-128/streams.80s80s.de/">80s 80s</option>
+                        <option value="http://nrj.de/stuttgart">Energy Stuttgart</option>
+                        <option value="http://addrad.io/4454xb3">107.7</option>
                     </select>
                     <br>
                     <div class="column">

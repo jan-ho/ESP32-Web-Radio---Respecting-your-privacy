@@ -7,7 +7,7 @@
 typedef struct
 {
   String name;
-  const char *url;
+  String url;
 } RadioChannel;
 
 class Radio
@@ -20,6 +20,7 @@ public:
   void pause();
   void resume();
   void setVolume(uint8_t volume);
+  boolean isPlaying();
 
 private:
   Audio *audio;

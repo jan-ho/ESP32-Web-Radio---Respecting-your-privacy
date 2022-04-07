@@ -4,7 +4,8 @@ Radio::Radio(Audio *audio, int ampEnable)
 {
   this->audio = audio;
   this->ampEnable = ampEnable;
-  pinMode(ampEnable, OUTPUT);
+  pinMode(ampEnable, OPEN_DRAIN);
+  audio->setVolume(6); //init volume
   digitalWrite(ampEnable, 0); // shutdown amp for powersaving
 }
 
@@ -14,9 +15,9 @@ boolean Radio::play(RadioChannel channel)
   stopped = false;
   digitalWrite(ampEnable, 1); // enable amp
 
-  if (!audio->connecttohost(channel.url))
+  if (!audio->connecttohost(channel.url.c_str()))
   {
-    Serial.printf("Failed to connect to %s\n", channel.url);
+    Serial.println("Failed to connect to: " + channel.url);
     return false;
   }
   return true;
@@ -60,4 +61,9 @@ void Radio::setVolume(uint8_t volume)
   volume = (volume < 0) ? 0 : (volume > 100) ? 100
                                              : volume;
   audio->setVolume(volume * 21 / 100);
+}
+
+boolean Radio::isPlaying()
+{
+  return !stopped;
 }

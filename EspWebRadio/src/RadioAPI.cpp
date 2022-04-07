@@ -2,19 +2,19 @@
 
 WebServer *RadioAPI::webserver = NULL;
 Radio *RadioAPI::radio = NULL;
-RadioChannel *RadioAPI::channelList = NULL;
-uint8_t RadioAPI::listLength = 0;
 RadioChannel RadioAPI::currentChannel = {};
+RadioChannel RadioAPI::currentAlarmChannel = {};
 RadioAlarm *RadioAPI::alarm = NULL;
 
-RadioAPI::RadioAPI(WebServer *webserver, Radio *radio, RadioChannel *channelList, uint8_t listLength, RadioAlarm *alarm)
+RadioAPI::RadioAPI(WebServer *webserver, Radio *radio, RadioAlarm *alarm)
 {
+
+
   RadioAPI::webserver = webserver;
   RadioAPI::radio = radio;
-  RadioAPI::channelList = channelList;
-  RadioAPI::listLength = listLength;
-  RadioAPI::currentChannel = channelList[0];
   RadioAPI::alarm = alarm;
+  currentChannel = {"startUPChannel", "http://liveradio.swr.de/sw282p3/swr3"};
+  currentAlarmChannel = {"startUPChannel", "http://liveradio.swr.de/sw282p3/swr3"};
 
   webserver->on("/", onRoot);
   webserver->on("/channel", onChannel);
@@ -39,22 +39,10 @@ void RadioAPI::onNotFound()
 
 void RadioAPI::onChannel()
 {
-  if (webserver->hasArg("channel"))
+  if (webserver->hasArg("url"))
   {
-    String channel = webserver->arg("channel");
-    for (int i = 0; i < listLength; i++)
-    {
-      if (channel.equalsIgnoreCase(channelList[i].name))
-      {
-        radio->play(channelList[i]);
-        currentChannel = channelList[i];
-      }
-    }
-  }
-  else if (webserver->hasArg("url"))
-  {
-    String url = webserver->arg("url");
-    currentChannel = {"custom", url.c_str()};
+    currentChannel = {"custom", webserver->arg("url")};
+    Serial.println("CurrentChannel: " + currentChannel.name + "  " + currentChannel.url);
     radio->play(currentChannel);
   }
   webserver->send(200);
@@ -62,6 +50,7 @@ void RadioAPI::onChannel()
 
 void RadioAPI::onPlay()
 {
+  Serial.println("CurrentChannel: " + currentChannel.name + "  " + currentChannel.url);
   radio->play(currentChannel);
   webserver->send(200);
 }
@@ -99,14 +88,10 @@ void RadioAPI::onAlarm()
   uint8_t snoozeMinutes = snooze.toInt();
   alarm->setSnooze(snoozeMinutes);
 
-  String channel = webserver->arg("channel");
-  for (int i = 0; i < listLength; i++)
-  {
-    if (channel.equalsIgnoreCase(channelList[i].name))
-    {
-      alarm->setChannel(channelList[i]);
-    }
-  }
+  String channel = webserver->arg("url");
+  String url = webserver->arg("url");
+  currentAlarmChannel = {"custom", url.c_str()};
+  alarm->setChannel(currentAlarmChannel);
   alarm->start();
   webserver->send(200);
 }

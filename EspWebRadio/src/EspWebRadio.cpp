@@ -19,18 +19,6 @@
 #define I2S_LRC 26
 #define AMP_ENABLE 33
 
-#define CHANNEL_COUNT 7
-
-RadioChannel channels[CHANNEL_COUNT] = {
-    {"SWR1", "http://liveradio.swr.de/sw282p3/swr1bw"},                // SWR1
-    {"SWR3", "http://liveradio.swr.de/sw282p3/swr3"},                  // SWR3
-    {"SWR4", "http://liveradio.swr.de/sw282p3/swr4bw"},                // SWR4
-    {"Antenne 1", "http://stream.antenne1.de/a1stg/livestream2.mp3"},  // Antenne 1
-    {"Antenne Bayern", "http://stream.antenne.de/antenne/stream/mp3"}, // Antenne Bayern
-    {"BigFM", "http://streams.bigfm.de/bigfm-deutschland-128-mp3"},    // BigFM
-    {"107.7", "http://addrad.io/4454xb3"}                              // 107.7
-};
-
 WebServer server;                                                      // define server instance
 AutoConnect portal(server);                                            // create AutoConnect portal
 AutoConnectConfig configAutoConnect(AUTO_CONNECT_AP, AUTO_CONNECT_PW); // define AutoConnectConfig instance
@@ -48,9 +36,14 @@ void setup()
 
   radio = new Radio(&audio, AMP_ENABLE); // create radio, API and alarm instance
   radioAlarm = new RadioAlarm(radio);
-  api = new RadioAPI(&server, radio, channels, CHANNEL_COUNT, radioAlarm);
+  api = new RadioAPI(&server, radio, radioAlarm);
 
-  MDNS.begin(LOCAL_DOMAIN_NAME);                  // start mDNS responder for local name
+  while (!audio.setPinout(I2S_BCLK, I2S_LRC, I2S_DOUT))
+  {
+    Serial.println("[Error] Couldn't start audio player!");
+    delay(5000);
+  }
+
   WiFi.setHostname(AUTO_CONNECT_HOST);            // define hostname in dhcp mode
   configAutoConnect.hostName = AUTO_CONNECT_HOST; // define hostname in ap mode
   portal.config(configAutoConnect);               // update Portal with new AP name and PW
@@ -59,7 +52,6 @@ void setup()
   { // start AutoConnect process
     Serial.println("WiFi connected: " + WiFi.localIP().toString());
   }
-  MDNS.addService("http", "tcp", 80); // add HTTP service to mDNS responder
 
   //##################OTA Setup###################################
 
@@ -91,18 +83,17 @@ void setup()
 
   ArduinoOTA.begin(); // start OTA
 
-  while (!audio.setPinout(I2S_BCLK, I2S_LRC, I2S_DOUT))
-  {
-    Serial.println("[Error] Couldn't start audio player!");
-    delay(5000);
-  }
   radioAlarm->init();
 }
 
 void loop()
 {
   portal.handleClient(); // handle AutoConnect client
-  ArduinoOTA.handle();   // handle OTA
-  audio.loop();          // handle the tune
-  radioAlarm->handler(); // compare time, fire alarm, fire snooze
+
+  if (!radio->isPlaying())
+  {
+    ArduinoOTA.handle();   // handle OTA
+    radioAlarm->handler(); // compare time, fire alarm, fire snooze
+  }
+  audio.loop(); // handle the tune
 }

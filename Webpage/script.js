@@ -6,7 +6,7 @@ function changeChannel(element, fieldName) {
     }
     else {
         urlField.style.display = 'none';
-        runCommand('POST', '/channel', {channel: element.value});
+        runCommand('POST', '/channel', {url: element.value});
     }
 }
 
@@ -15,7 +15,7 @@ function startAlarm(button) {
 
     if(button.innerHTML == 'Start') {
         var data = {
-            channel: form['channel'].value,
+            url: form['channel'].value,
             time: form['time'].value + 'Z',
             snooze: parseInt(form['snooze'].value)
         };
