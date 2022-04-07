@@ -51,6 +51,8 @@ void setup()
   if (portal.begin())
   { // start AutoConnect process
     Serial.println("WiFi connected: " + WiFi.localIP().toString());
+    String buffer = "Hi there I'm ready for you. Just open your browser under the IP Address: " + WiFi.localIP().toString();
+    radio->say(buffer.c_str());
   }
 
   //##################OTA Setup###################################

@@ -4,7 +4,7 @@ Radio::Radio(Audio *audio, int ampEnable)
 {
   this->audio = audio;
   this->ampEnable = ampEnable;
-  pinMode(ampEnable, OPEN_DRAIN);
+  pinMode(ampEnable, OUTPUT_OPEN_DRAIN);
   audio->setVolume(6); //init volume
   digitalWrite(ampEnable, 0); // shutdown amp for powersaving
 }
@@ -66,4 +66,10 @@ void Radio::setVolume(uint8_t volume)
 boolean Radio::isPlaying()
 {
   return !stopped;
+}
+
+void Radio::say(const char * speech)
+{
+  digitalWrite(ampEnable, 1);
+  audio->connecttospeech(speech, "en");
 }

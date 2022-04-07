@@ -9,7 +9,6 @@ RadioAlarm *RadioAPI::alarm = NULL;
 RadioAPI::RadioAPI(WebServer *webserver, Radio *radio, RadioAlarm *alarm)
 {
 
-
   RadioAPI::webserver = webserver;
   RadioAPI::radio = radio;
   RadioAPI::alarm = alarm;
@@ -30,6 +29,10 @@ RadioAPI::RadioAPI(WebServer *webserver, Radio *radio, RadioAlarm *alarm)
 void RadioAPI::onRoot()
 {
   webserver->send(200, "text/html", webpage);
+  if (!radio->isPlaying())
+  {
+    radio->say("You made it! Just choose your favorite station and give it a go. Or set an Alarm if you want.");
+  }
 }
 
 void RadioAPI::onNotFound()
@@ -52,6 +55,7 @@ void RadioAPI::onPlay()
 {
   Serial.println("CurrentChannel: " + currentChannel.name + "  " + currentChannel.url);
   radio->play(currentChannel);
+
   webserver->send(200);
 }
 

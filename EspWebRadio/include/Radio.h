@@ -21,6 +21,7 @@ public:
   void resume();
   void setVolume(uint8_t volume);
   boolean isPlaying();
+  void say(const char * speech);
 
 private:
   Audio *audio;
