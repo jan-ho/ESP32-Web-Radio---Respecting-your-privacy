@@ -51,7 +51,9 @@ void setup()
   if (portal->begin())
   { // start AutoConnect process
     String buffer = "Connected under IP:" + WiFi.localIP().toString();
+    #ifdef NOTSOPRIVATE
     radio->say(buffer.c_str());
+    #endif
   }
 
 

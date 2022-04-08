@@ -35,7 +35,9 @@ void RadioAPI::onRoot()
   webserver->send(200, "text/html", webpage);
   if (!radio->isPlaying())
   {
+    #ifdef NOTSOPRIVATE
     radio->say("You made it! Just choose your favorite station and give it a go. Or set an Alarm if you want.");
+    #endif
   }
 }
 

@@ -11,4 +11,6 @@
 #define I2S_LRC 26
 #define AMP_ENABLE 33
 
+//#define NOTSOPRIVATE
+
 #endif // DEFINES_H
