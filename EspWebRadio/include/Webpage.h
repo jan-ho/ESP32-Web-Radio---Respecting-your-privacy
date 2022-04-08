@@ -396,6 +396,17 @@ select {
                     </div>
                 </form>
             </div>
+            <div class="card">
+                <form id="bluetooth" class="column" onsubmit="return false">
+                    <h2>Bluetooth and AutoConnect</h2>
+                    <hr>
+                    <div class="row">
+                        <button name="enableBluetooth" onclick="runCommand('POST', '/bt');">Enable Bluetooth</button>
+                        <div class="separator"></div>
+                        <button name="gotoAC" onclick="parent.location='/_ac'">Goto AutoConnect Page</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </body>
 </html>

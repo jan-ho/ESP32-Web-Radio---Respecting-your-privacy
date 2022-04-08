@@ -1,6 +1,6 @@
 #include "Radio.h"
 
-Radio::Radio(Audio *audio, int ampEnable)
+Radio::Radio(Audio *audio)
 {
   this->audio = audio;
   this->ampEnable = ampEnable;
@@ -13,7 +13,7 @@ boolean Radio::play(RadioChannel channel)
 {
   paused = false;
   stopped = false;
-  digitalWrite(ampEnable, 1); // enable amp
+  digitalWrite(AMP_ENABLE, 1); // enable amp
 
   if (!audio->connecttohost(channel.url.c_str()))
   {
@@ -72,4 +72,10 @@ void Radio::say(const char * speech)
 {
   digitalWrite(ampEnable, 1);
   audio->connecttospeech(speech, "en");
+}
+
+void Radio::clear()
+{
+  stop();
+  audio->~Audio(); //make as most space as possible
 }

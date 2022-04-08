@@ -6,11 +6,12 @@
 #include "Radio.h"
 #include "RadioAlarm.h"
 #include "Webpage.h"
+#include "Bluetooth.h"
 
 class RadioAPI
 {
 public:
-  RadioAPI(WebServer *webserver, Radio *radio, RadioAlarm *alarm);
+  RadioAPI(WebServer *webserver, Radio *radio, RadioAlarm *alarm, Bluetooth *bluetooth);
 
 private:
   static WebServer *webserver;
@@ -18,6 +19,8 @@ private:
   static RadioChannel currentChannel;
   static RadioChannel currentAlarmChannel;
   static RadioAlarm *alarm;
+  static boolean *bt;
+  static Bluetooth *bluetooth;
 
   static void onRoot();
   static void onNotFound();
@@ -30,6 +33,7 @@ private:
   static void onAlarm();
   static void onSnooze();
   static void onStopAlarm();
+  static void onBluetooth();
 };
 
 #endif // RADIOAPI_H

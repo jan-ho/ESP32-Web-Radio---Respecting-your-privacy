@@ -5,13 +5,16 @@ Radio *RadioAPI::radio = NULL;
 RadioChannel RadioAPI::currentChannel = {};
 RadioChannel RadioAPI::currentAlarmChannel = {};
 RadioAlarm *RadioAPI::alarm = NULL;
+Bluetooth *RadioAPI::bluetooth = NULL;
 
-RadioAPI::RadioAPI(WebServer *webserver, Radio *radio, RadioAlarm *alarm)
+RadioAPI::RadioAPI(WebServer *webserver, Radio *radio, RadioAlarm *alarm, Bluetooth *bluetooth)
 {
 
   RadioAPI::webserver = webserver;
   RadioAPI::radio = radio;
   RadioAPI::alarm = alarm;
+  RadioAPI::bluetooth = bluetooth;
+
   currentChannel = {"startUPChannel", "http://liveradio.swr.de/sw282p3/swr3"};
   currentAlarmChannel = {"startUPChannel", "http://liveradio.swr.de/sw282p3/swr3"};
 
@@ -23,6 +26,7 @@ RadioAPI::RadioAPI(WebServer *webserver, Radio *radio, RadioAlarm *alarm)
   webserver->on("/alarm", onAlarm);
   webserver->on("/snooze", onSnooze);
   webserver->on("/stop-alarm", onStopAlarm);
+  webserver->on("/bt", onBluetooth);
   webserver->onNotFound(onNotFound);
 }
 
@@ -45,7 +49,6 @@ void RadioAPI::onChannel()
   if (webserver->hasArg("url"))
   {
     currentChannel = {"custom", webserver->arg("url")};
-    Serial.println("CurrentChannel: " + currentChannel.name + "  " + currentChannel.url);
     radio->play(currentChannel);
   }
   webserver->send(200);
@@ -113,4 +116,10 @@ void RadioAPI::onStopAlarm()
 {
   alarm->stop();
   webserver->send(200);
+}
+
+void RadioAPI::onBluetooth()
+{
+  radio->clear();
+  bluetooth->start();
 }

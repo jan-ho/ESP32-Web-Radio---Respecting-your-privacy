@@ -3,6 +3,7 @@
 
 #include <Arduino.h>
 #include <Audio.h>
+#include "defines.h"
 
 typedef struct
 {
@@ -13,7 +14,7 @@ typedef struct
 class Radio
 {
 public:
-  Radio(Audio *audio, int ampEnable);
+  Radio(Audio *audio);
 
   boolean play(RadioChannel channel);
   void stop();
@@ -22,6 +23,7 @@ public:
   void setVolume(uint8_t volume);
   boolean isPlaying();
   void say(const char * speech);
+  void clear();
 
 private:
   Audio *audio;
