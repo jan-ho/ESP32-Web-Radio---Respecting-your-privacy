@@ -96,10 +96,7 @@ void RadioAPI::onAlarm()
   String snooze = webserver->arg("snooze");
   uint8_t snoozeMinutes = snooze.toInt();
   alarm->setSnooze(snoozeMinutes);
-
-  String channel = webserver->arg("url");
-  String url = webserver->arg("url");
-  currentAlarmChannel = {"custom", url.c_str()};
+  currentAlarmChannel = {"custom", webserver->arg("url")};
   alarm->setChannel(currentAlarmChannel);
   alarm->start();
   webserver->send(200);
